@@ -19,12 +19,12 @@ return await AppStartupGuard.TryRunConsoleApplicationAsync(async () =>
                       ██╔══╝  ██║ ██╔██╗ ██╔══╝  ██║  ██║██╔══██║██║   ██║   ██╔══██╗██║   ██║ ██╔██╗ 
                       ██║     ██║██╔╝ ██╗███████╗██████╔╝██║  ██║██║   ██║   ██████╔╝╚██████╔╝██╔╝ ██╗
                       ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
-                      {VersionControl.GetVersion()} | Essencia, Rch_Kauan, Rigan (C) 2026
+                      {VersionControl.GetVersion()} | essenciaftw, rochakauan, rigan (C) 2026
                       https://pureessence.dev/hosted-services/discord/fixedhitbox
                       Powered by DSharpPlus 5.x (.NET 10)
                       
                       Licensed under GNU Affero General Public License v3.0. This program comes with ABSOLUTELY NO WARRANTY.
-                      Source code: https://github.com/rochakauan/fixedhitbox-discordbot
+                      Source code: https://github.com/fixedhitbox/fixedhitbox
                       
                       Everyone is permitted to copy and distribute verbatim copies
                       of this license document, but changing it is not allowed.
