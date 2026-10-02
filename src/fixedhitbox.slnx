@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/discord/">
+    <Project Path="discord/bot.commands-fh/bot.commands-fh.csproj" />
+    <Project Path="discord/bot.main-fh/bot.main-fh.csproj" />
+  </Folder>
+  <Project Path="application-fh/application-fh.csproj" />
+  <Project Path="domain-fh/domain-fh.csproj" />
+  <Project Path="infra-fh/infra-fh.csproj" />
+</Solution>

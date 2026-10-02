@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>bot.main_fh</RootNamespace>
+    <UserSecretsId>4658c121-df18-437d-a1d1-767aff5ce00e</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="botsettings.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+
+    <Content Include="appsettings.*.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
+    <Content Include="botsettings.*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="DSharpPlus" />
+    <PackageReference Include="DSharpPlus.Commands" />
+    <PackageReference Include="DSharpPlus.Interactivity" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Formatting.Compact" />
+    <PackageReference Include="Serilog.Settings.Configuration" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.File" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\domain-fh\domain-fh.csproj" />
+    <ProjectReference Include="..\..\infra-fh\infra-fh.csproj" />
+    <ProjectReference Include="..\bot.commands-fh\bot.commands-fh.csproj" />
+  </ItemGroup>
+
+</Project>

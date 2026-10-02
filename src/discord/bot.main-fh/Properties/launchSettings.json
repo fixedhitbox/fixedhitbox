@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "bot.main-fh": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
