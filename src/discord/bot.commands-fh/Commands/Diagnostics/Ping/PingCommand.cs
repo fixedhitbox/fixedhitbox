@@ -9,7 +9,7 @@ public sealed class PingCommand
 {
     [Command(PingTranslator.DefaultName), InteractionLocalizer<PingTranslator>]
     [Description(PingTranslator.DefaultDescription)]
-    public static async ValueTask ExecuteAsync(CommandContext ctx)
+    public static async Task ExecuteAsync(CommandContext ctx)
     {
         var sw = Stopwatch.StartNew();
 
