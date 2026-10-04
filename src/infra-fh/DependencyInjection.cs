@@ -10,10 +10,12 @@ namespace infra_fh;
 
 public static class DependencyInjection
 {
-    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         AddAredlApiOptions(services, configuration);
         services.AddConfiguredHttpClient<IAredlApiService, AredlApiService, AredlApiOptions>();
+        
+        return services;
     }
     
     private static void AddAredlApiOptions (IServiceCollection services, IConfiguration configuration)

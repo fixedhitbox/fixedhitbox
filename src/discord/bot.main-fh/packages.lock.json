@@ -447,7 +447,9 @@
       "application-fh": {
         "type": "Project",
         "dependencies": {
-          "domain-fh": "[1.0.0, )"
+          "Microsoft.Extensions.Configuration.Abstractions": "[10.0.12, )",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.12, )",
+          "domain-fh": "[0.1.0-alpha.1, )"
         }
       },
       "bot.commands-fh": {
@@ -456,7 +458,8 @@
           "DSharpPlus": "[5.0.0-nightly-02576, )",
           "DSharpPlus.Commands": "[5.0.0-nightly-02576, )",
           "Humanizer.Core": "[3.0.10, )",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.12, )"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.12, )",
+          "application-fh": "[0.1.0-alpha.1, )"
         }
       },
       "domain-fh": {
@@ -470,8 +473,8 @@
           "Microsoft.Extensions.Http.Polly": "[10.0.12, )",
           "Microsoft.Extensions.Options": "[10.0.12, )",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "[10.0.12, )",
-          "application-fh": "[1.0.0, )",
-          "domain-fh": "[1.0.0, )"
+          "application-fh": "[0.1.0-alpha.1, )",
+          "domain-fh": "[0.1.0-alpha.1, )"
         }
       },
       "Humanizer.Core": {

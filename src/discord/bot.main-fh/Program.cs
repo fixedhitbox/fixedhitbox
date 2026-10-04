@@ -1,4 +1,5 @@
-﻿using bot.main_fh;
+﻿using application_fh;
+using bot.main_fh;
 using bot.main_fh.Extensions.Options;
 using bot.main_fh.Extensions.Services.DiscordBot;
 using infra_fh;
@@ -46,7 +47,10 @@ return await AppStartupGuard.TryRunConsoleApplicationAsync(async () =>
         .ReadFrom.Configuration(builder.Configuration)
         .ReadFrom.Services(services));
     
-    builder.Services.AddInfrastructure(builder.Configuration);
+    builder.Services
+        .AddInfrastructure(builder.Configuration)
+        .AddApplication();
+    
     builder.Services.AddDiscordOptions(builder.Configuration);
     builder.Services.AddDiscordBot(builder.Configuration, builder.Configuration.GetValue<ulong>("Discord:DebugGuildId"));
 
