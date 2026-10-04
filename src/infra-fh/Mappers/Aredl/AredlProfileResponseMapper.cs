@@ -43,6 +43,7 @@ internal static class AredlProfileResponseMapper
             GlobalName: response.GlobalName ?? response.Username,
             DiscordId: response.DiscordId.Value,
             Description: response.Description ?? string.Empty,
+            Country: response.Country,
             CreatedAt: response.CreatedInAredlAt.Value,
             BackgroundLevel: response.BackgroundLevel,
             Records: polishedRecords);

@@ -6,6 +6,7 @@ public record AredlProfileDto(
     string GlobalName,
     ulong DiscordId,
     string Description,
+    int? Country,
     DateTimeOffset CreatedAt,
     int? BackgroundLevel,
     IReadOnlyList<AredlRecordDto> Records);
