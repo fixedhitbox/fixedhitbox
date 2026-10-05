@@ -7,7 +7,6 @@ public record AredlLevelDto(
     bool TwoPlayer,
     int Position,
     int Points,
-    bool Legacy,
     string? Description,
     int? Song,
     IReadOnlyList<AredlRecordDto>? Records = null);

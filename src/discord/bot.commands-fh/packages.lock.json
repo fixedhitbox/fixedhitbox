@@ -37,6 +37,12 @@
         "resolved": "3.0.10",
         "contentHash": "yZIhtw8sYuvsONzQbZxWpR60tMWYHXoo0DL6nyOqSFiU5POjBTSEyWFpTQtJEZuy+oqiYTXKXY/Mjx7KnqIQFw=="
       },
+      "ISO3166": {
+        "type": "Direct",
+        "requested": "[1.0.4, )",
+        "resolved": "1.0.4",
+        "contentHash": "ApT7VLnfxfS0fnayegZS1QzjALTnuHTwjaN1fqsiMBEC3D+0qiwnNHi+oaJ5pS2/C9D06KV1bc+CF6t7Iqmu3g=="
+      },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Direct",
         "requested": "[10.0.12, )",

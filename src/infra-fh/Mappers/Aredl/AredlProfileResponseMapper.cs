@@ -23,6 +23,12 @@ internal static class AredlProfileResponseMapper
             return Result<AredlProfileDto, MapperError>.Failure(
                 MapperError.Validation(), "CreatedInAredlAt is missing.");
 
+        var rankResult = AredlProfileRankResponseMapper.Map(response.Rank);
+        if (!rankResult.IsSuccess)
+            return Result<AredlProfileDto, MapperError>.Failure(MapperError.Validation(), 
+                rankResult.Message ?? 
+                $"{nameof(AredlProfileRankResponseMapper)} could not map a {nameof(AredlProfileRankResponse)}");
+        
         var polishedRecords = new List<AredlRecordDto>();
 
         if (response.Records is not null)
@@ -46,6 +52,7 @@ internal static class AredlProfileResponseMapper
             Country: response.Country,
             CreatedAt: response.CreatedInAredlAt.Value,
             BackgroundLevel: response.BackgroundLevel,
+            Rank: rankResult.Value,
             Records: polishedRecords);
         
         return Result<AredlProfileDto, MapperError>.Success(dto);

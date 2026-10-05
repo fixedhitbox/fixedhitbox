@@ -9,4 +9,5 @@ public record AredlProfileDto(
     int? Country,
     DateTimeOffset CreatedAt,
     int? BackgroundLevel,
+    AredlProfileRankDto Rank,
     IReadOnlyList<AredlRecordDto> Records);

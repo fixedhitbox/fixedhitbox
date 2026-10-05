@@ -28,30 +28,36 @@ internal sealed class AredlApiService(HttpClient httpClient, ILogger<AredlApiSer
         }
         catch (OperationCanceledException ex) when (ct.IsCancellationRequested)
         {
-            return Result<AredlProfileDto, ApiError>.Failure(ApiError.CanceledOperation(), ex.Message);
+            return Result<AredlProfileDto, ApiError>.Failure(
+                ApiError.CanceledOperation("AREDL.FETCH.CANCELLATION_REQUESTED"), ex.Message);
         }
         catch (TaskCanceledException ex)
         {
-            logger.LogWarning(ex, "AREDL request timed out for {DiscordId}", discordId);
-            return Result<AredlProfileDto, ApiError>.Failure(ApiError.Timeout(), ex.Message);
+            logger.LogWarning(ex, "[AREDL.FETCH_TIMEOUT] AREDL request timed out for [{DiscordId}]", discordId);
+            return Result<AredlProfileDto, ApiError>.Failure(ApiError.Timeout("AREDL.FETCH_TIMEOUT"), ex.Message);
         }
         catch (HttpRequestException ex)
         {
-            logger.LogWarning(ex, "AREDL unreachable for {DiscordId}", discordId);
+            logger.LogWarning(ex, "[AREDL.FETCH.EXTERNAL_SYSTEM_UNREACHABLE] AREDL unreachable for [{DiscordId}]", 
+                discordId);
             return Result<AredlProfileDto, ApiError>.Failure(ApiError.Unexpected(
-                "We couldn't reach AREDL right now."), ex.Message);
+                "We couldn't reach AREDL right now.",
+                "AREDL.FETCH.EXTERNAL_SYSTEM_UNREACHABLE"), ex.Message);
         }
         catch (Exception ex) when (ex is JsonException or NotSupportedException)
         {
-            logger.LogError(ex, "Invalid AREDL response for {DiscordId}", discordId);
-            return Result<AredlProfileDto, ApiError>.Failure(ApiError.InvalidResponse(), ex.Message);
+            logger.LogError(ex, "[AREDL.FETCH.INVALID_DATA.001] Invalid AREDL response for [{DiscordId}]", discordId);
+            return Result<AredlProfileDto, ApiError>.Failure(
+                ApiError.InvalidResponse("AREDL.FETCH.INVALID_DATA.001"), ex.Message);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Unexpected error fetching AREDL profile for {DiscordId}", discordId);
+            logger.LogError(ex, "[AREDL.FETCH.UNEXPECTED.001] Unexpected error fetching AREDL profile for [{DiscordId}]", 
+                discordId);
             return Result<AredlProfileDto, ApiError>.Failure(ApiError.Unexpected(
                 "It seems something strange happened in our system while " +
-                "we were trying to find your profile on AREDL."), 
+                "we were trying to find your profile on AREDL.",
+                "AREDL.FETCH.UNEXPECTED.001"), 
                 ex.Message);
         }
     }
@@ -65,48 +71,70 @@ internal sealed class AredlApiService(HttpClient httpClient, ILogger<AredlApiSer
             {
                 var retryAfter = response.Headers.RetryAfter?.Delta
                                  ?? (response.Headers.RetryAfter?.Date - DateTimeOffset.UtcNow);
-                logger.LogWarning("AREDL rate limit hit. Retry-After: {RetryAfter}", retryAfter);
+                logger.LogWarning("[AREDL.FETCH.LIMITED_CONNECTION] AREDL rate limit hit. Retry-After: {RetryAfter}", retryAfter);
 
                 return Result<AredlProfileDto, ApiError>.Failure(
-                    ApiError.RateLimited("AREDL is receiving too many connections. Please try again in a moment."),
+                    ApiError.RateLimited(
+                        "AREDL is receiving too many connections. Please try again in a moment.",
+                        "AREDL.FETCH.LIMITED_CONNECTION"),
                     $"AREDL returned 429 for Discord ID {discordId}. Retry-After: {retryAfter}");
             }
             case System.Net.HttpStatusCode.NotFound:
                 return Result<AredlProfileDto, ApiError>.Failure(
-                    ApiError.NotFound(), "Aredl profile user not found for: " + discordId);
+                    ApiError.NotFound("AREDL.FETCH.NOT_FOUND"), "Aredl profile user not found for: " + discordId);
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            logger.LogWarning("AREDL returned {StatusCode} for {DiscordId}", (int)response.StatusCode, discordId);
+            logger.LogWarning("AREDL returned {StatusCode} for [{DiscordId}]", (int)response.StatusCode, discordId);
 
             return Result<AredlProfileDto, ApiError>.Failure(
-                ApiError.Unexpected("Sorry, something went wrong while fetching your player profile."), 
+                ApiError.Unexpected(
+                    "[AREDL.FETCH.UNEXPECTED.002] Sorry, something went wrong while fetching your player profile.",
+                    "AREDL.FETCH.UNEXPECTED.002"), 
                 $"AREDL returned [{(int)response.StatusCode}] '{response.ReasonPhrase}' - for Discord ID {discordId}.");
         }
             
         var responseDto = await response.Content.ReadFromJsonAsync<AredlProfileResponse>(JsonOptions, ct);
         
-        return EnsureValidResponseData(responseDto);
+        return EnsureValidResponseData(responseDto, discordId);
     }
 
-    private static Result<AredlProfileDto, ApiError> EnsureValidResponseData(AredlProfileResponse? responseDto)
+    private Result<AredlProfileDto, ApiError> EnsureValidResponseData(AredlProfileResponse? responseDto, 
+        ulong discordId)
     {
         if (responseDto is null)
+        {
+            logger.LogWarning("[AREDL.FETCH.INVALID_DATA.002] Aredl API sent an invalid or empty response for ID [{Id}]", 
+                discordId);
             return Result<AredlProfileDto, ApiError>.Failure(
-                ApiError.InvalidResponse(), "Aredl API sent an invalid or empty response.");
+                ApiError.InvalidResponse("AREDL.FETCH.INVALID_DATA.002"), 
+                "Aredl API sent an invalid or empty response.");
+        }
 
         var map = AredlProfileResponseMapper.Map(responseDto);
 
         if (!map.IsSuccess)
+        {
+            logger.LogError("[AREDL.FETCH.INVALID_DATA.003] {Mapper} could not map a profile in {Service} for [{Id}] - {Reason}",
+                nameof(AredlProfileResponseMapper), 
+                nameof(AredlApiService), 
+                discordId,
+                map.Message);
+            
             return Result<AredlProfileDto, ApiError>.Failure(
-                ApiError.InvalidResponse(),
+                ApiError.InvalidResponse("AREDL.FETCH.INVALID_DATA.003"),
                 map.Message ??
                 $"{nameof(AredlProfileResponseMapper)} could not map a profile in {nameof(AredlApiService)}.");
+        }
 
         if (string.IsNullOrWhiteSpace(map.Value.Username))
-            return Result<AredlProfileDto, ApiError>.Failure(ApiError.NotFound(),
+        {
+            logger.LogError("[AREDL.FETCH.INVALID_DATA.004] Aredl API returned an object with an empty username for [{Id}].",
+                discordId);
+            return Result<AredlProfileDto, ApiError>.Failure(ApiError.NotFound("AREDL.FETCH.INVALID_DATA.004"),
                 "Aredl API returned an object with an empty username.");
+        }
         
         return Result<AredlProfileDto, ApiError>.Success(map.Value);
     }

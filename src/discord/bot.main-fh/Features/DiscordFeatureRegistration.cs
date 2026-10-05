@@ -17,9 +17,9 @@ public static class DiscordFeatures
         services.ConfigureEventHandlers(events =>
         {
             foreach (var module in modules)
-                module.ConfigureEvents(events);
+                 module.ConfigureEvents(events);
         });
-
+        
         services.AddCommandsExtension((_, extension) =>
         {
             extension.AddProcessor(new SlashCommandProcessor(new SlashCommandConfiguration

@@ -1,5 +1,11 @@
 {
   "Discord": {
     "OverwriteGlobalApplicationCommands": false
+  },
+
+  "Assets": {
+    "Banners": {
+      "aredl_banner": "0-0-0-0-0-0&"
+    }
   }
 }

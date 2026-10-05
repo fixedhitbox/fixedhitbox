@@ -12,7 +12,6 @@ internal sealed class AredlLevelResponse
     
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public int? Points { get; init; }
-    public bool? Legacy { get; init; }
 
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public ulong? LevelId { get; init; }

@@ -8,6 +8,7 @@
       <PackageReference Include="DSharpPlus" />
       <PackageReference Include="DSharpPlus.Commands" />
       <PackageReference Include="Humanizer.Core" />
+      <PackageReference Include="ISO3166" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     </ItemGroup>
 

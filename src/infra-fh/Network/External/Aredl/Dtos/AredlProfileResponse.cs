@@ -21,7 +21,10 @@ internal sealed record AredlProfileResponse
     
     [JsonPropertyName("background_level")]
     public int? BackgroundLevel { get; init; }
-
+    
+    [JsonPropertyName("rank")]
+    public AredlProfileRankResponse? Rank { get; init; }
+    
     [JsonPropertyName("records")]
     public IReadOnlyList<AredlRecordResponse>? Records { get; init; } = [];
 }

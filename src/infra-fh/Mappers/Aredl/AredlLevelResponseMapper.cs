@@ -32,11 +32,7 @@ internal static class AredlLevelResponseMapper
         if (response.TwoPlayer is null)
             return Result<AredlLevelDto, MapperError>.Failure(MapperError.Validation(),
                 "response.TwoPlayer is missing.");
-
-        if (response.Legacy is null)
-            return Result<AredlLevelDto, MapperError>.Failure(MapperError.Validation(),
-                "response.Legacy is missing.");
-
+        
         var recordResult = AredlRecordResponseMapper.Map(response.Records);
 
         if (!recordResult.IsSuccess)
@@ -50,7 +46,6 @@ internal static class AredlLevelResponseMapper
             response.TwoPlayer.Value,
             response.Position.Value,
             response.Points.Value,
-            response.Legacy.Value,
             response.Description,
             response.Song,
             recordResult.Value));
