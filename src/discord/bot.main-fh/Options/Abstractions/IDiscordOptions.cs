@@ -1,6 +1,6 @@
 ﻿namespace bot.main_fh.Options.Abstractions;
 
-internal interface IDiscordOptions
+internal interface IAppOptions
 {
     static abstract string SectionName { get; }
 }

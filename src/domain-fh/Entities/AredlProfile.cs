@@ -4,18 +4,18 @@ namespace domain_fh.Entities;
 
 public sealed class AredlProfile : Entity
 {
-    public ulong DiscordId { get; set; }
+    public ulong DiscordId { get; private set; }
     
-    public string Username { get; set; } = string.Empty;
-    public string GlobalName { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
+    public string Username { get; private set; } = string.Empty;
+    public string GlobalName { get; private set; } = string.Empty;
+    public string Description { get; private set; } = string.Empty;
 
-    public Guid AredlUserId { get; set; }
-    public int? Country { get; set; }
-    public DateTimeOffset CreatedInAredlAt { get; set; }
+    public Guid AredlUserId { get; private set; }
+    public int? Country { get; private set; }
+    public DateTimeOffset CreatedInAredlAt { get; private set; }
 
     public DateTimeOffset LinkedAtUtc { get; private set; }
-    public DateTimeOffset LastUpdatedAt { get; private set; }
+    public DateTimeOffset LastSyncedAt { get; private set; }
     
     private AredlProfile() { }
 
@@ -25,7 +25,8 @@ public sealed class AredlProfile : Entity
         string globalName,
         string description,
         Guid aredlUserId,
-        int? country)
+        int? country,
+        DateTimeOffset createdInAredlAt)
     {
         DiscordId = discordId;
         Username = username;
@@ -33,5 +34,10 @@ public sealed class AredlProfile : Entity
         Description = description;
         AredlUserId = aredlUserId;
         Country = country;
+        CreatedInAredlAt = createdInAredlAt.ToUniversalTime();
+        
+        var now = DateTimeOffset.UtcNow;
+        LinkedAtUtc = now;
+        LastSyncedAt = now;
     }
 }

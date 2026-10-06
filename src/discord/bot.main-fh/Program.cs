@@ -39,19 +39,22 @@ return await AppStartupGuard.TryRunConsoleApplicationAsync(async () =>
 
     builder.Configuration
         .AddJsonFile("botsettings.json", optional: false, reloadOnChange: true)
-        .AddJsonFile(
-            $"botsettings.{builder.Environment.EnvironmentName}.json",
-            optional: true, reloadOnChange: true);
+            .AddJsonFile(
+                $"botsettings.{builder.Environment.EnvironmentName}.json",
+                optional: true, reloadOnChange: true);
     
     builder.Services.AddSerilog((services, loggerConfig) => loggerConfig
         .ReadFrom.Configuration(builder.Configuration)
-        .ReadFrom.Services(services));
+            .ReadFrom.Services(services));
     
     builder.Services
         .AddInfrastructure(builder.Configuration)
-        .AddApplication();
+            .AddApplication();
     
-    builder.Services.AddDiscordOptions(builder.Configuration);
+    builder.Services
+        .AddAppOptions(builder.Configuration)
+            .AddDiscordOptions(builder.Configuration);
+    
     builder.Services.AddDiscordBot(builder.Configuration, builder.Configuration.GetValue<ulong>("Discord:DebugGuildId"));
 
     var host = builder.Build();

@@ -2,7 +2,7 @@
 
 namespace bot.main_fh.Options;
 
-public sealed class DiscordOptions : IDiscordOptions
+public sealed class DiscordOptions : IAppOptions
 {
     public string Token { get; init; } = string.Empty;
     public ulong? DebugGuildId { get; init; }
