@@ -14,13 +14,13 @@ internal static class OptionsExtensions
         private OptionsBuilder<T> AddConfiguredOptions<T>(
             IConfiguration configuration, 
             Action<OptionsBuilder<T>>? configure = null)
-            where T : class, IDiscordOptions
+            where T : class, IAppOptions
             => services.AddConfiguredOptions<T>(configuration, T.SectionName, configure);
 
         private OptionsBuilder<T> AddConfiguredOptions<T>(
             IConfiguration configuration, string sectionName,
             Action<OptionsBuilder<T>>? configure = null)
-            where T : class, IDiscordOptions
+            where T : class, IAppOptions
         {
             var section = configuration.GetSection(sectionName);
         
@@ -36,9 +36,17 @@ internal static class OptionsExtensions
             return builder;
         }
 
-        public IServiceCollection AddDiscordOptions(IConfiguration configuration)
+        public IServiceCollection AddAppOptions(IConfiguration configuration)
         {
-            services.AddConfiguredOptions<DiscordOptions>(configuration, options =>
+            services.AddConfiguredOptions<AppOptions>(configuration, options => 
+                options.Validate(o => !string.IsNullOrWhiteSpace(o.ConnectionString),
+                    "Connection string is required. Ensure you have provided a valid connection string."));
+            
+            return services;
+        }
+        
+        public void AddDiscordOptions(IConfiguration configuration)
+            => services.AddConfiguredOptions<DiscordOptions>(configuration, options =>
             {
                 options.Validate(o => !string.IsNullOrWhiteSpace(o.Token),
                     "Discord token is required.");
@@ -54,8 +62,5 @@ internal static class OptionsExtensions
                     },
                     "Discord debug guild id must be between 1 and 100 characters.");
             });
-        
-            return services;
-        }
     }
 }
