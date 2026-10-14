@@ -27,19 +27,23 @@ public static class PendingLinkWebhook
                               🪪 Confirm if the account link below is yours.
                               """)
             .AddField("Player", $"[{dto.GlobalName}](https://aredl.net/profile/user/{dto.Username})", true)
-            .AddField("Country",
-                $"{CountryCodeTranslator.IsoCodeToDiscordEmojiFlag(dto.Country)} #{countryPosition}", true)
-
-            .AddField("Hardest",
-                $"[<:extremedemon:1492859003070582865> {hardestDemon ?? "❓"}]({videoUrl}) #{levelRank}", true)
-            
             .AddAredlBase(sctx, assets.Value.AredlBanner)
             .WithThumbnail(sctx.User.AvatarUrl);
+
+        embed.AddField("Country",
+            dto.Country is not null
+                ? $"{CountryCodeTranslator.IsoCodeToDiscordEmojiFlag(dto.Country)} #{countryPosition}"
+                : CountryCodeTranslator.IsoCodeToDiscordEmojiFlag(dto.Country), true);
         
+        embed.AddField("Hardest",
+            videoUrl is not null
+                ? $"[<:extremedemon:1492859003070582865> {hardestDemon ?? "❓"}]({videoUrl}) #{levelRank}"
+                : $"<:extremedemon:1492859003070582865> ❓", true);
+
         return new DiscordWebhookBuilder()
             .AddEmbed(embed)
             .AddActionRowComponent(PendingButtons());
-
+        
     }
     
     private static DiscordButtonComponent[] PendingButtons()

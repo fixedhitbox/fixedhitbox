@@ -2,7 +2,6 @@
 using application_fh.Interfaces.Application.Aredl;
 using bot.commands_fh.Commands.Aredl.LinkAredl.Handlers;
 using bot.commands_fh.Commands.Aredl.LinkAredl.Options;
-using bot.commands_fh.Commands.Aredl.LinkAredl.Webhooks;
 using DSharpPlus.Commands;
 using DSharpPlus.Commands.Processors.SlashCommands;
 using DSharpPlus.Commands.Processors.SlashCommands.Localization;
