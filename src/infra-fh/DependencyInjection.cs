@@ -1,8 +1,12 @@
 ﻿using application_fh.Interfaces.Infrastructure.Aredl;
+using domain_fh.Repositories;
+using infra_fh.Data;
+using infra_fh.Data.Repositories;
 using infra_fh.Extensions.HttpClient;
 using infra_fh.Extensions.Options;
 using infra_fh.Network.External.Aredl.Services;
 using infra_fh.Options;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +17,12 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         AddAredlApiOptions(services, configuration);
+        
+        services.AddDbContextFactory<AppDbContext>(o => 
+            o.UseNpgsql(configuration["AppOptions:ConnectionString"]));
+
+        services.AddSingleton<IAredlProfileRepository, AredlProfileRepository>();
+        
         services.AddConfiguredHttpClient<IAredlApiService, AredlApiService, AredlApiOptions>();
         
         return services;
